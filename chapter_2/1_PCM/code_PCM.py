@@ -1,19 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Éditeur de Spyder
-
-Ceci est un script temporaire.
-"""
-
-#quelques couleurs
-rouge_A='#C60C2E'
-vert1_A='#005157'
-vert2_A='#627D77'
-vert3_A='#9EB28F'
-vert4_A='#C5E5A4'
-gris1_A='#595A5C'
-coule=[rouge_A,vert1_A,vert2_A,vert3_A,vert4_A,gris1_A]
-
 import numpy as np
 import matplotlib.pyplot as plt
 # distribution 'Dirac' function
@@ -71,7 +55,6 @@ for i in range(len(Fo)):
 		print("minimum time step =", round(dt_min,2))
 		dt=0.9*dt_min
 		print("changing to =", round(dt,2))
-
 # time 
 while t < sim_time:
 	# boundary conditions
