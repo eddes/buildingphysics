@@ -1,49 +1,50 @@
 import numpy as np
 import matplotlib.pyplot as plt
-# distribution 'Dirac' function
+
 def fc_distrib(T,dTf,Tf):
 	return np.exp(- (T*(T-Tf)**2/dTf)/(np.sqrt(np.pi*dTf**2) ))
-# function for the liquid fraction
 def fc_fraction(T,dTf,Tf):
 	if T<(Tf-dTf): f=0 # all solid
 	elif T>(Tf+dTf): f=1 # all liquid
 	else:f=(T-Tf+dTf)/(2*dTf)
 	return f
-# function for the apparent Cp 
 def fc_Cp_apparent(T,dTf,Tf,Lf,Cp_s,Cp_l):
 	fraction=fc_fraction(T,dTf,Tf)
 	distrib=fc_distrib(T,dTf,Tf)
 	return Lf*distrib + Cp_s + fraction*(Cp_l-Cp_s)
 
 # Cps in J/kg/K
-Cp_s=800
-Cp_l=2000
+Cp_s=1800
+Cp_l=2400
 Lf=188000 # Lf
 dTf=0.01
 Tmin=20
 Tmax=30
-T_init=(Tmin+Tmax)/2
-Tf=27 # fusion temperature
-T_init=Tf # initialize 
+Tf=27
+T_init=Tf
+
 # material props
 L=0.1# m
-k=0.9 # conductivity (supposed equal for solid & liquid)
-rho=800 # density (same)
+k=0.9
+rho=800
+
 # domain properties and initial conditions
-n=10+2 # add 2 lines to the solid domain for the boundary conditions
+n=10+2
 K=np.eye(n,n,k=-1)*1 + np.eye(n,n)*-2 + np.eye(n,n,k=1)*1
 K[0,0]=0
 K[0,1]=0
 K[-1,-1]=0
 K[-1,-2]=0
-dx=L/(n-2) # compute the actual dx (n minus two boundary condition nodes)
+dx=L/n #
 T_plus,Cp_t=np.zeros(n),np.zeros(n)
-T=np.ones(n)*T_init # initialize
+T=np.ones(n)*T_init # initialize at Tmin
+
 # simulation time and time step
 t=0 
-hours=0.1
-sim_time=hours*3600 #s
+heures=0.1
+sim_time=heures*3600 #s
 dt=5 # s
+
  #intialize the local Fourier number for PCMs
 Fo=np.zeros(n)
 for i in range(len(Fo)):
@@ -78,4 +79,4 @@ x_pos=np.arange(0,L,dx)
 plt.plot(x_pos, np.ones(n)*Tf,color=coule[-1],linestyle="-",alpha=0.9,marker='')
 plt.xlabel("x position [m]")
 plt.ylabel("Temperature [°C]")
-plt.plot(x_pos, T_plus, color=coule[0], alpha=0.65, linestyle="--",marker='')
+plt.plot(x_pos, T_plus, alpha=0.65, linestyle="--",marker='')
