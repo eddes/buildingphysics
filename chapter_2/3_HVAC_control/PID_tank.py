@@ -82,7 +82,7 @@ while t <= sim_time:
 	# let's see and plot who does what at each time step
 	if valve_position > 0:
 		pcent_P.append(abs (H0 - h) * KP / valve_position)
-		pcent_I.append( KP * (H0 - h) * (dt / Tn) / valve_position)
+		pcent_I.append( sum_error + KP * (H0 - h) * (dt / Tn) / valve_position)
 		pcent_D.append(KP * (Td * delta_error / dt) / valve_position)
 	else:
 		pcent_P.append(0)
