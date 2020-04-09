@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 26 14:15:51 2020
-
-@author: walthere
-"""
 #quelques couleurs
 rouge_A='#C60C2E'
 vert1_A='#005157'
