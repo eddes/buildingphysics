@@ -1,13 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def fc_distrib(T,dTf,Tf):
-	return np.exp(- (T*(T-Tf)**2/dTf)/(np.sqrt(np.pi*dTf**2) ))
 def fc_fraction(T,dTf,Tf):
-	if T<(Tf-dTf): f=0 # all solid
-	elif T>(Tf+dTf): f=1 # all liquid
-	else:f=(T-Tf+dTf)/(2*dTf)
+	if   T<(Tf-2*dTf): f=0 # all solid
+	elif T>(Tf+2*dTf): f=1 # all liquid
+	else:f=(T-Tf+2*dTf)/(dTf*4)
 	return f
+def fc_distrib(T,dTf,Tf):
+	T=T+273.15
+	Tf=Tf+273.15
+	return np.exp(-((T-Tf)/(dTf))**2)/np.sqrt(np.pi*dTf**2)
 def fc_Cp_apparent(T,dTf,Tf,Lf,Cp_s,Cp_l):
 	fraction=fc_fraction(T,dTf,Tf)
 	distrib=fc_distrib(T,dTf,Tf)
