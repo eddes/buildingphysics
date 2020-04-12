@@ -22,7 +22,10 @@ pipenv shell
 jupyter notebook --ip=0.0.0.0
 ```
 
-## Structure of the reporistory
+A browser should start with a Jupyter server showing the root folder of the repository.
+
+
+## Structure of the repository
 
 The files are organised as in the book :
 
