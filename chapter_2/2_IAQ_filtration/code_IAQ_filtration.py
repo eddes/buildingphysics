@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-#quelques couleurs
-rouge_A,vert1_A,vert2_A,vert3_A,vert4_A,gris1_A='#C60C2E','#005157','#627D77','#9EB28F','#C5E5A4','#595A5C'
-coule=[rouge_A,vert1_A,vert2_A,vert3_A,vert4_A,gris1_A]
+from tools.plot_tools import colors
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -110,27 +108,27 @@ typical_week_ext=fc_semaine_type_series(dfC["PM25_ext"],"semaine")
 plt.clf()
 plt.xlabel("Average week [h]]")
 plt.ylabel(r"$PM_{2.5}$[µg/m$^3$]")
-plt.plot(typical_week_ext,color=coule[-1],linestyle="-",alpha=0.9,marker='',label='outdoor')
-plt.plot(typical_week_filt,color=coule[0],linestyle="-",alpha=0.9,marker='',label='indoor')
+plt.plot(typical_week_ext, color=colors[-1], linestyle="-", alpha=0.9, marker='', label='outdoor')
+plt.plot(typical_week_filt, color=colors[0], linestyle="-", alpha=0.9, marker='', label='indoor')
 plt.legend()
 plt.savefig("./filter_typical_ouik.pdf",dpi=200,bbox_inches='tight')
 
 plt.clf()
 plt.ylabel("Efficiency [-]")
-dfC["eta"].plot(color=coule[2],linestyle="--",alpha=1,marker='')
+dfC["eta"].plot(color=colors[2], linestyle="--", alpha=1, marker='')
 plt.savefig("./filter_eta.pdf",dpi=200,bbox_inches='tight')
 
 plt.clf()
 plt.ylabel("Mass in filter [g]")
-dfC["mass"].plot(color=coule[3],linestyle="--",alpha=1,marker='')
+dfC["mass"].plot(color=colors[3], linestyle="--", alpha=1, marker='')
 plt.savefig("./filter_mass.pdf",dpi=200,bbox_inches='tight')
 
 plt.clf()
 plt.ylabel(r"Additional pressure drop of filter [$\Delta$ Pa]")
-dfC["pdc"].plot(color=coule[4],linestyle="--",alpha=1,marker='')
+dfC["pdc"].plot(color=colors[4], linestyle="--", alpha=1, marker='')
 plt.savefig("./filter_pdc.pdf",dpi=200,bbox_inches='tight')
 
 plt.clf()
 plt.ylabel(r"$PM_{2.5}$[µg/m$^3$]")
-dfC["PM25"].plot(color=coule[-1],linestyle="--",alpha=0.5,marker='')
+dfC["PM25"].plot(color=colors[-1], linestyle="--", alpha=0.5, marker='')
 plt.savefig("./PM25_year.pdf",dpi=200,bbox_inches='tight')

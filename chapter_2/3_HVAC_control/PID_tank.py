@@ -1,14 +1,6 @@
-#quelques couleurs
-rouge_A='#C60C2E'
-vert1_A='#005157'
-vert2_A='#627D77'
-vert3_A='#9EB28F'
-vert4_A='#C5E5A4'
-medblue='royalblue'
-gris1_A='#595A5C'
-coule=[rouge_A,vert1_A,vert2_A,vert3_A,vert4_A,medblue,gris1_A]
 import numpy as np
 import matplotlib.pyplot as plt
+from tools.plot_tools import colors
 
 def fc_valve_curve(characteristic, valve_pos,Qmax):
 	if characteristic == "linear":
@@ -96,17 +88,18 @@ while t <= sim_time:
 plt.subplot(121)
 plt.xlabel("Time [s]")
 plt.ylabel("Water height [m]")
-plt.plot(time, height,color=coule[-2],linestyle="-",alpha=1,marker='')
-plt.plot(time, np.ones(len(time))*H0,color=coule[-1],linestyle="--",alpha=0.85,marker='')
+plt.plot(time, height,color=colors[-2],linestyle="-",alpha=1,marker='')
+plt.plot(time, np.ones(len(time))*H0,color=colors[-1],linestyle="--",alpha=0.85,marker='')
 
 plt.subplot(122)
 plt.xlabel("Time [s]")
 plt.ylabel("Share of P, I and D in the valve opening [-]")
-plt.plot(time, pcent_P,color=coule[0],linestyle="-",alpha=1,marker='',label="P")
-plt.plot(time, pcent_I,color=coule[1],linestyle="-",alpha=1,marker='',label="I")
+plt.plot(time, pcent_P,color=colors[0],linestyle="-",alpha=1,marker='',label="P")
+plt.plot(time, pcent_I,color=colors[1],linestyle="-",alpha=1,marker='',label="I")
 if Td != 0:
-	plt.plot(time, pcent_D,color=coule[2],linestyle="-",alpha=1,marker='',label="D")
-plt.plot(time, v_pos,color=coule[-1],linestyle="--",alpha=0.95,marker='',label="valve position")
+	plt.plot(time, pcent_D,color=colors[2],linestyle="-",alpha=1,marker='',label="D")
+plt.plot(time, v_pos,color=colors[-1],linestyle="--",alpha=0.95,marker='',label="valve position")
 
 plt.legend()
 plt.tight_layout()
+plt.savefig("./PID_tank.png",dpi=200,bbox_inches='tight')

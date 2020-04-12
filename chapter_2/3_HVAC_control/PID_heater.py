@@ -1,14 +1,5 @@
 # -*- coding: utf-8 -*-
-#quelques couleurs
-rouge_A='#C60C2E'
-vert1_A='#005157'
-vert2_A='#627D77'
-vert3_A='#9EB28F'
-vert4_A='#C5E5A4'
-medblue='royalblue'
-gris1_A='#595A5C'
-coule=[rouge_A,vert1_A,vert2_A,vert3_A,vert4_A,medblue,gris1_A]
-
+from tools.plot_tools import colors
 from scipy.optimize import fsolve
 import numpy as np
 import matplotlib.pyplot as plt
@@ -154,20 +145,21 @@ while t <= sim_time:
 plt.subplot(121)
 plt.xlabel("Time [s]")
 plt.ylabel("Temperature [°C]")
-plt.plot(time, T_ambl,color=coule[3],linestyle="-",alpha=1,marker='',label='room')
-plt.plot(time, T_inl,color=coule[0],linestyle="-",alpha=1,marker='',label='heater inlet')
-plt.plot(time, T_outl,color=coule[1],linestyle="-",alpha=1,marker='',label='heater outlet')
-plt.plot(time, np.ones(len(time))*T_set,color=coule[-1],linestyle="--",alpha=0.85,marker='')
+plt.plot(time, T_ambl,color=colors[3],linestyle="-",alpha=1,marker='',label='room')
+plt.plot(time, T_inl,color=colors[0],linestyle="-",alpha=1,marker='',label='heater inlet')
+plt.plot(time, T_outl,color=colors[1],linestyle="-",alpha=1,marker='',label='heater outlet')
+plt.plot(time, np.ones(len(time))*T_set,color=colors[-1],linestyle="--",alpha=0.85,marker='')
 plt.legend()
 
 plt.subplot(122)
 plt.xlabel("Time [s]")
 plt.ylabel("Share of P, I and D in the valve opening [-]")
-plt.plot(time, pcent_P,color=coule[0],linestyle="-",alpha=1,marker='',label="P")
-plt.plot(time, pcent_I,color=coule[1],linestyle="-",alpha=1,marker='',label="I")
+plt.plot(time, pcent_P,color=colors[0],linestyle="-",alpha=1,marker='',label="P")
+plt.plot(time, pcent_I,color=colors[1],linestyle="-",alpha=1,marker='',label="I")
 if Td != 0:
-	plt.plot(time, pcent_D,color=coule[2],linestyle="-",alpha=1,marker='',label="D")
+	plt.plot(time, pcent_D,color=colors[2],linestyle="-",alpha=1,marker='',label="D")
 
 
 plt.legend()
 plt.tight_layout()
+plt.savefig("./PID_heater.png",dpi=200,bbox_inches='tight')
