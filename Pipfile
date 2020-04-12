@@ -10,5 +10,6 @@ scipy = "*"
 jupyter = "*"
 numpy = "*"
 matplotlib = "*"
+pandas = "*"
 [requires]
 python_version = "3.6"

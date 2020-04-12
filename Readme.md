@@ -1,16 +1,24 @@
 # Building Physics - Applications in Python
 
-This repository contains the code examples quoted in the book. A pdf copy of this book can be downloaded [here](link)
+This repository contains the code examples quoted in the book. A pdf copy of this book can be downloaded [here](link).
 
 ## Environment setup
 
-The Python environment of this repository can be set up via Pipenv. The first command installs the project dependencies.
-The second command starts a pipenv shell with the adequate virtual env.
+The Python environment of this repository can be set up via Pipenv. 
+To install Pipenv on your machine, we refer you to the [Pipenv documentation](https://pipenv-fork.readthedocs.io/en/latest/install.html).
 
 ```shell script
 pipenv install
 pipenv shell
 ``` 
+The first command installs the project dependencies.
+The second command starts a pipenv shell with the virtual env activated.
+
+If the dependencies locking takes a long time, use :
+
+```
+PIPENV_SKIP_LOCK=true pipenv install 
+```
 
 ## Starting a notebook
 
@@ -23,7 +31,6 @@ jupyter notebook --ip=0.0.0.0
 ```
 
 A browser should start with a Jupyter server showing the root folder of the repository.
-
 
 ## Structure of the repository
 
