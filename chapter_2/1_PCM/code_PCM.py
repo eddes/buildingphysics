@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+from tools.plot_tools import colors
 def fc_fraction(T,dTf,Tf):
 	if   T<(Tf-2*dTf): f=0 # all solid
 	elif T>(Tf+2*dTf): f=1 # all liquid
@@ -78,7 +78,7 @@ while t < sim_time:
 	T=T_plus # T turns into T_plus to allow the calculation of the next T_plus
 
 x_pos=np.arange(0,L,dx)
-plt.plot(x_pos, np.ones(n)*Tf,color=coule[-1],linestyle="-",alpha=0.9,marker='')
+plt.plot(x_pos, np.ones(n)*Tf,color=colors[-1],linestyle="-",alpha=0.9,marker='')
 plt.xlabel("x position [m]")
 plt.ylabel("Temperature [°C]")
 plt.plot(x_pos, T_plus, alpha=0.65, linestyle="--",marker='')
