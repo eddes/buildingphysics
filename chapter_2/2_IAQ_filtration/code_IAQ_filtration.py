@@ -46,89 +46,92 @@ def fc_eta(m_filt): # m_filt given in grams
 def fc_pressure_drop(m_filt):
 	return 0.145*m_filt**2 - 0.81*m_filt+ 47.2
 
-tau=1# vol/h
-delta=0.15#	1/h
-eta=0.8 # initial efficiency
-V=2000 #m3
-qv=2000 #m3/h
-dt=1	#h
+if __name__ == '__main__':
 
-m_limit=30 # max mass before maintenance (g)
-nb_filt=0 # number of filters used
-# load the PM2.5 data
-Cext=np.loadtxt("PM25.txt")
-nb=len(Cext)
-time=np.arange(0,nb,1)
-# prepare the vectors for computing
-Csupply=np.zeros(nb)
-C=np.zeros(nb)
-m_filter=np.zeros(nb) # initialy nothing in filter
-eta_filter=np.ones(nb)*eta # initial eta for eta_filter[0] actually (will be updated in the time loop)
-pdc_filter=np.zeros(nb)
 
-Csupply[0]=Cext[0] # aesthetical fill for plotting
-m_filter[0]=1e-4 # against division by !0
-pdc_ref=fc_pressure_drop(0) # reference pressure drop for clean filter
-# time loop
-for i in range(1,nb-1):
-	# compute efficiency
-	eta_filter[i]=fc_eta(m_filter[i-1])
-	# compute the additionnal pressure drop compared to clean filter
-	pdc_filter[i]=fc_pressure_drop(m_filter[i-1])-pdc_ref 
-	# supply PM2.5 concentration
-	Csupply[i]=(1-eta_filter[i])*Cext[i]
-	# mass in filter, converted to grams
-	m_filter[i]=(Cext[i]-Csupply[i])*qv/1e6 + m_filter[i-1]
-	# check if we change the filter
-	if m_filter[i]>m_limit:
-		m_filter[i]=0
-		nb_filt+=1 # count the number of filter change 
-	#explicit scheme for C+
-	C[i]=C[i-1] + dt*tau*(Csupply[i]-C[i-1])
-# compute the energy use 
-watts_hourly=pdc_filter*qv/3600
-total_kWh=sum(watts_hourly)/1000
+	tau=1# vol/h
+	delta=0.15#	1/h
+	eta=0.8 # initial efficiency
+	V=2000 #m3
+	qv=2000 #m3/h
+	dt=1	#h
 
-# post process and plotting
-a=pd.date_range('1/1/2018', periods=8760, freq='h')
-dfC = pd.DataFrame(index=a)
+	m_limit=30 # max mass before maintenance (g)
+	nb_filt=0 # number of filters used
+	# load the PM2.5 data
+	Cext=np.loadtxt("PM25.txt")
+	nb=len(Cext)
+	time=np.arange(0,nb,1)
+	# prepare the vectors for computing
+	Csupply=np.zeros(nb)
+	C=np.zeros(nb)
+	m_filter=np.zeros(nb) # initialy nothing in filter
+	eta_filter=np.ones(nb)*eta # initial eta for eta_filter[0] actually (will be updated in the time loop)
+	pdc_filter=np.zeros(nb)
 
-dfC["PM25"]=Csupply
-dfC["PM25_ext"]=Cext
-dfC["eta"]=eta_filter
-dfC["mass"]=m_filter
-dfC["pdc"]=pdc_filter
+	Csupply[0]=Cext[0] # aesthetical fill for plotting
+	m_filter[0]=1e-4 # against division by !0
+	pdc_ref=fc_pressure_drop(0) # reference pressure drop for clean filter
+	# time loop
+	for i in range(1,nb-1):
+		# compute efficiency
+		eta_filter[i]=fc_eta(m_filter[i-1])
+		# compute the additionnal pressure drop compared to clean filter
+		pdc_filter[i]=fc_pressure_drop(m_filter[i-1])-pdc_ref
+		# supply PM2.5 concentration
+		Csupply[i]=(1-eta_filter[i])*Cext[i]
+		# mass in filter, converted to grams
+		m_filter[i]=(Cext[i]-Csupply[i])*qv/1e6 + m_filter[i-1]
+		# check if we change the filter
+		if m_filter[i]>m_limit:
+			m_filter[i]=0
+			nb_filt+=1 # count the number of filter change
+		#explicit scheme for C+
+		C[i]=C[i-1] + dt*tau*(Csupply[i]-C[i-1])
+	# compute the energy use
+	watts_hourly=pdc_filter*qv/3600
+	total_kWh=sum(watts_hourly)/1000
 
-# get rid off the last empty index
-dfC=dfC.drop(dfC.index[-1])
+	# post process and plotting
+	a=pd.date_range('1/1/2018', periods=8760, freq='h')
+	dfC = pd.DataFrame(index=a)
 
-typical_week_filt=fc_semaine_type_series(dfC["PM25"],"semaine")
-typical_week_ext=fc_semaine_type_series(dfC["PM25_ext"],"semaine")
+	dfC["PM25"]=Csupply
+	dfC["PM25_ext"]=Cext
+	dfC["eta"]=eta_filter
+	dfC["mass"]=m_filter
+	dfC["pdc"]=pdc_filter
 
-plt.clf()
-plt.xlabel("Average week [h]]")
-plt.ylabel(r"$PM_{2.5}$[µg/m$^3$]")
-plt.plot(typical_week_ext, color=colors[-1], linestyle="-", alpha=0.9, marker='', label='outdoor')
-plt.plot(typical_week_filt, color=colors[0], linestyle="-", alpha=0.9, marker='', label='indoor')
-plt.legend()
-plt.savefig("./filter_typical_ouik.pdf",dpi=200,bbox_inches='tight')
+	# get rid off the last empty index
+	dfC=dfC.drop(dfC.index[-1])
 
-plt.clf()
-plt.ylabel("Efficiency [-]")
-dfC["eta"].plot(color=colors[2], linestyle="--", alpha=1, marker='')
-plt.savefig("./filter_eta.pdf",dpi=200,bbox_inches='tight')
+	typical_week_filt=fc_semaine_type_series(dfC["PM25"],"semaine")
+	typical_week_ext=fc_semaine_type_series(dfC["PM25_ext"],"semaine")
 
-plt.clf()
-plt.ylabel("Mass in filter [g]")
-dfC["mass"].plot(color=colors[3], linestyle="--", alpha=1, marker='')
-plt.savefig("./filter_mass.pdf",dpi=200,bbox_inches='tight')
+	plt.clf()
+	plt.xlabel("Average week [h]]")
+	plt.ylabel(r"$PM_{2.5}$[µg/m$^3$]")
+	plt.plot(typical_week_ext, color=colors[-1], linestyle="-", alpha=0.9, marker='', label='outdoor')
+	plt.plot(typical_week_filt, color=colors[0], linestyle="-", alpha=0.9, marker='', label='indoor')
+	plt.legend()
+	plt.savefig("./filter_typical_ouik.pdf",dpi=200,bbox_inches='tight')
 
-plt.clf()
-plt.ylabel(r"Additional pressure drop of filter [$\Delta$ Pa]")
-dfC["pdc"].plot(color=colors[4], linestyle="--", alpha=1, marker='')
-plt.savefig("./filter_pdc.pdf",dpi=200,bbox_inches='tight')
+	plt.clf()
+	plt.ylabel("Efficiency [-]")
+	dfC["eta"].plot(color=colors[2], linestyle="--", alpha=1, marker='')
+	plt.savefig("./filter_eta.pdf",dpi=200,bbox_inches='tight')
 
-plt.clf()
-plt.ylabel(r"$PM_{2.5}$[µg/m$^3$]")
-dfC["PM25"].plot(color=colors[-1], linestyle="--", alpha=0.5, marker='')
-plt.savefig("./PM25_year.pdf",dpi=200,bbox_inches='tight')
+	plt.clf()
+	plt.ylabel("Mass in filter [g]")
+	dfC["mass"].plot(color=colors[3], linestyle="--", alpha=1, marker='')
+	plt.savefig("./filter_mass.pdf",dpi=200,bbox_inches='tight')
+
+	plt.clf()
+	plt.ylabel(r"Additional pressure drop of filter [$\Delta$ Pa]")
+	dfC["pdc"].plot(color=colors[4], linestyle="--", alpha=1, marker='')
+	plt.savefig("./filter_pdc.pdf",dpi=200,bbox_inches='tight')
+
+	plt.clf()
+	plt.ylabel(r"$PM_{2.5}$[µg/m$^3$]")
+	dfC["PM25"].plot(color=colors[-1], linestyle="--", alpha=0.5, marker='')
+	plt.savefig("./PM25_year.pdf",dpi=200,bbox_inches='tight')
