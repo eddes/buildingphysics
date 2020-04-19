@@ -10,7 +10,7 @@ Colab notebooks allow you to run code examples in an interactive way. Everything
 This approach is well suited for people interested in testing the examples without having to modify the code or setup a Python environment.
 
 ### Chapter 1 : basics
-- [Euler and Crank Nicolson] (notebooks/chapter_1/Euler_and_CN_schemes.ipynb) 
+- [Euler and Crank Nicolson](notebooks/chapter_1/Euler_and_CN_schemes.ipynb) 
 
 ### Chapter 2 : PCM, HVAC
 - PCM 
