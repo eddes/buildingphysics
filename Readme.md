@@ -13,8 +13,8 @@ To run a notebook, click on one of the links below, then on the button ![GoogleC
 - [Euler and Crank Nicolson](notebooks/chapter_1/Euler_and_CN_schemes.ipynb) 
 
 ### Chapter 2 : PCM, HVAC
-- PCM 
-- Particule filtration
+- [PCM](notebooks/chapter_2/PCM.ipynb)  
+- [Particule filtration](notebooks/chapter_2/code_IAQ_filtration.ipynb)  
 - PID water tank  
 
 ### Chapter 3 : coupled problems and minimization
