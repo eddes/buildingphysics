@@ -43,7 +43,7 @@ If the dependencies locking takes a long time, use :
 PIPENV_SKIP_LOCK=true pipenv install 
 ```
 
-## Starting a notebook locally 
+### Starting a notebook locally 
 
 The Notebooks can be run on your local machine using a Jupyter instance. To start a notebook server :
 
