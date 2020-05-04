@@ -1,12 +1,12 @@
+(Work in progress ! The book has not been released yet :)
 # Building Physics - Applications in Python
 
-This repository provides some Python implementations applied to Building Physics. A pdf copy of the associated handbook can be downloaded [here](link).
-
+This repository provides Python implementations of the models presented in the book **Building Physics - Applications in Python**. 
 There are two ways of using this repository :
 
 ## 1 - Colab Notebooks
 
-Colab notebooks allow you to run code examples in an interactive way. Everything is ready to go, no need to install anything !
+Colab notebooks allow you to run code examples in an interactive way. Everything is ready to go and there is no need to install anything !
 This approach is well suited for people interested in testing the examples without having to modify the code or setup a Python environment.
 To run a notebook, click on one of the links below, then on the button ![GoogleColab](https://camo.githubusercontent.com/52feade06f2fecbf006889a904d221e6a730c194/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667 "This is an example")
 ### Chapter 1 : basics
@@ -23,7 +23,7 @@ To run a notebook, click on one of the links below, then on the button ![GoogleC
 
 ## 2 - Python scripts
 
-The python scripts provide some material to tinker with and a started for the reader interested in implemented the exercises listed along the book. 
+The python scripts provide some material to tinker with. It is a good starter for the reader interested in implementing the exercises listed along the book. 
 
 ### Environment setup
 
