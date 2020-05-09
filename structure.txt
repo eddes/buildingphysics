@@ -1,5 +1,0 @@
-The files are organised as in the book :
-
-- Chapter 1 : basics
-- Chapter 2 : PCM, HVAC
-- Chapter 3 : coupled problems and minimization
