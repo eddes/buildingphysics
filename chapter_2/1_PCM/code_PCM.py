@@ -14,16 +14,16 @@ def fc_Cp_apparent(T,dTf,Tf,Lf,Cp_s,Cp_l):
 	fraction=fc_fraction(T,dTf,Tf)
 	distrib=fc_distrib(T,dTf,Tf)
 	return Lf*distrib + Cp_s + fraction*(Cp_l-Cp_s)
-if __name__ == '__main__':
 
+if __name__ == '__main__':
 	# Cps in J/kg/K
 	Cp_s=1800
 	Cp_l=2400
 	Lf=188000 # Lf
-	dTf=0.01
+	dTf=0.01 # quarter fusion temperature interval
 	Tmin=20
 	Tmax=30
-	Tf=27
+	Tf=27 #fusion temperature
 	T_init=Tf
 
 	# material props
@@ -38,17 +38,17 @@ if __name__ == '__main__':
 	K[0,1]=0
 	K[-1,-1]=0
 	K[-1,-2]=0
-	dx=L/n #
+	dx=L/n # space discretisation
 	T_plus,Cp_t=np.zeros(n),np.zeros(n)
 	T=np.ones(n)*T_init # initialize at Tmin
 
 	# simulation time and time step
 	t=0
-	heures=0.1
-	sim_time=heures*3600 #s
+	hours=0.1
+	sim_time=hours*3600 #s
 	dt=5 # s
 
-	 #intialize the local Fourier number for PCMs
+	 #intialize the local Fourier number for PCM
 	Fo=np.zeros(n)
 	for i in range(len(Fo)):
 		Fo[i]=k*dt/(rho*fc_Cp_apparent(T_init,dTf,Tf,Lf,Cp_s,Cp_l)*dx**2)
@@ -63,7 +63,6 @@ if __name__ == '__main__':
 	while t < sim_time:
 		# boundary conditions
 		T[0]=Tmin
-	#	T[n-1]=Tmin+(Tmax-Tmin)*t/sim_time
 		T[n-1]=Tmax
 		# inside the domain
 		T_plus=Fo*np.dot(K,T) +T
@@ -83,3 +82,4 @@ if __name__ == '__main__':
 	plt.xlabel("x position [m]")
 	plt.ylabel("Temperature [°C]")
 	plt.plot(x_pos, T_plus, alpha=0.65, linestyle="--",marker='')
+	plt.show()
