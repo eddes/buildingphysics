@@ -4,28 +4,27 @@
 This repository provides Python implementations of the models presented in the book **Building Physics - Applications in Python**. 
 There are two ways of using this repository :
 
-## 1 - Colab Notebooks
+## 1/ No install: Colab Notebooks
 
-Colab notebooks allow you to run code examples in an interactive way. Everything is ready to go and there is no need to install anything !
+Colab notebooks allow you to run code examples in an interactive way. Everything is ready to go and there is no need to install anything!
 This approach is well suited for people interested in testing the examples without having to modify the code or setup a Python environment.
-To run a notebook, click on one of the links below, then on the button ![GoogleColab](https://camo.githubusercontent.com/52feade06f2fecbf006889a904d221e6a730c194/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667 "This is an example")
-### Chapter 1 : basics
-- [Euler and Crank Nicolson integration schemes](notebooks/chapter_1/Euler_and_CN_schemes.ipynb) 
+To run a notebook, click on one of the links below, then on the button! [GoogleColab](https://camo.githubusercontent.com/52feade06f2fecbf006889a904d221e6a730c194/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667 "This is an example")
+  ### Chapter 1 : basics
+   - [Euler and Crank Nicolson integration schemes](notebooks/chapter_1/Euler_and_CN_schemes.ipynb) 
 
-### Chapter 2 : PCM, HVAC
-- [Phase change material](notebooks/chapter_2/PCM.ipynb)  
-- [Particle filtration](notebooks/chapter_2/code_IAQ_filtration.ipynb)  
-- [PID water tank](notebooks/chapter_2/PID_controller.ipynb)  
+  ### Chapter 2 : PCM, HVAC
+  - [Phase change material](notebooks/chapter_2/PCM.ipynb)  
+  - [Particle filtration](notebooks/chapter_2/code_IAQ_filtration.ipynb)  
+  - [PID water tank](notebooks/chapter_2/PID_controller.ipynb)  
 
-### Chapter 3 : coupled problems and minimization
+  ### Chapter 3 : coupled problems and minimization
+  - Work in progress
 
-- Work in progress
-
-## 2 - Python scripts
+## 2/ Python scripts
 
 The python scripts provide some material to tinker with. It is a good starter for the reader interested in implementing the exercises listed along the book. 
 
-### Environment setup
+### The local way - Environment setup
 
 You may want to set up an appropriate environment in order to create your own notebooks/
 The Python environment of this repository can be set up via Pipenv. 
