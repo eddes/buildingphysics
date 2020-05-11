@@ -13,8 +13,8 @@ To run a notebook, click on one of the links below, then on the button ![GoogleC
 - [Euler and Crank Nicolson integration schemes](notebooks/chapter_1/Euler_and_CN_schemes.ipynb) 
 
 ### Chapter 2 : PCM, HVAC
-- [Phase material change](notebooks/chapter_2/PCM.ipynb)  
-- [Particule filtration](notebooks/chapter_2/code_IAQ_filtration.ipynb)  
+- [Phase change material](notebooks/chapter_2/PCM.ipynb)  
+- [Particle filtration](notebooks/chapter_2/code_IAQ_filtration.ipynb)  
 - [PID water tank](notebooks/chapter_2/PID_controller.ipynb)  
 
 ### Chapter 3 : coupled problems and minimization
@@ -27,6 +27,7 @@ The python scripts provide some material to tinker with. It is a good starter fo
 
 ### Environment setup
 
+You may want to set up an appropriate environment in order to create your own notebooks/
 The Python environment of this repository can be set up via Pipenv. 
 To install Pipenv on your machine, we refer you to the [Pipenv documentation](https://pipenv-fork.readthedocs.io/en/latest/install.html).
 
