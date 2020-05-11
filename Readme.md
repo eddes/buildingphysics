@@ -24,7 +24,7 @@ To run a notebook, click on one of the links below, then on the button! [GoogleC
 
 The python scripts provide some material to tinker with. It is a good starter for the reader interested in implementing the exercises listed along the book. 
 
-### The local way - Environment setup
+### Environment setup
 
 You may want to set up an appropriate environment in order to create your own notebooks/
 The Python environment of this repository can be set up via Pipenv. 
