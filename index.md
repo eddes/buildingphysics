@@ -82,7 +82,7 @@ This book is free, open and available online.
 If you found it of any use, you are most welcome to cite it with this reference:
 ```
 @book{walther2020,
-title = {{Building Physics Applications in Python}},
+title = {Building Physics Applications in Python},
 author = {Walther, E.},
 year = {2020},
 publisher = {Spring},
