@@ -23,18 +23,35 @@ The *parti pris* in this book is hence to **show the link between the governing 
 them**, aiming at a practical use, namely `how to make things work`. It is meant to be a toolbox for simulation engineering, a basis for the illustration of theory, or a kick-start for the study of more complex
 problems.
 
+
+
 This manual is composed of three chapters, with a gradual increase in the difficulty:
 
-- **Chapter 1** succinctly explains the **fundamentals of the numerical methods used.
+- **Chapter 1** succinctly explains the fundamentals of the numerical methods used.
+
+ ![cover](images/schemes_HAM.png)
+ *Explanation of various integration schemes with code examples*
 
 - **Chapter 2** shows applications to heat transfer in phase change materials, PID control and indoor air
 quality.
 
+![cover](images/chauffage.png)
+*Application example : Indoor air quality simulation*
+
+![cover](images/pseudo_pareto.png)
+*Application example : indoor air particle filtering and cost estimation*
+
 - **Chapter 3** is about coupled problems and minimisation. Applications to polydispersed aerosols in
 enclosures, heat and mass transfer in walls and parameter fitting for transient problems are proposed.
 
-
 ## What about this book
+
+
+
+
+
+
+
 
 For all cases examined in the following chapters, source code or supplementary material such as pollution/weather data are available. Two types of users may be interested:
 
@@ -55,3 +72,15 @@ pages with a compatible PDF viewer (such as Adobe Reader or Foxit).
 This work is licensed under a Creative Commons “AttributionNonCommercial-ShareAlike 3.0 Unported” license. 
 
 ![licence](https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Cc-by-nc-sa_euro_icon.svg/120px-Cc-by-nc-sa_euro_icon.svg.png)
+
+This book is free, open and available online.
+If you found it of any use, you are most welcome to cite it with this reference:
+```
+@book{walther2020,
+title = {{Building Physics Applications in Python}},
+author = {Walther, E.},
+year = {2020},
+publisher = {Spring},
+address = {Argentoratum}
+}
+```
