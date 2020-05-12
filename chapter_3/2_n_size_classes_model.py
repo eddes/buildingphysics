@@ -11,10 +11,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from  scipy.optimize import fsolve
 
+# Crank-Nicolson scheme for polydisperse aerosol
 def fc_IAQ_coupled_classes(vec_CLp, vec_CL, tau,delta,dt,rho,S,V,Ce):
 	n=int(len(vec_CL)/2) # number of size classes
-#	print(vec_CL)
-	C,L = vec_CL[0:n], vec_CL[n:] # split into C and L
+	C,L = vec_CL[0:n], vec_CL[n:] # array splitting into C and L
 	Cp,Lp = vec_CLp[0:n], vec_CLp[n:]
 	# solve with delta being a vector this time
 	C_term = -Cp + C + 0.5*dt*( tau*(Ce-C) -delta*C+ rho*S*L/V) + 0.5*dt*( tau*(Ce-Cp) -delta*Cp+ rho*S*Lp/V)
@@ -35,7 +35,7 @@ qv=V*tau#m3/h
 
 # particle size classes
 d=[0.001,0.01,0.1,1,10]
-#initial mass distribution among the size classes
+#initial mass distribution among the size classes (the sum must equal one)
 dist_C_frac=[0.05,0.15,0.05,0.15,0.6]
 
 # coeffs for distribution behaviour
@@ -60,7 +60,7 @@ rhop=[]
 nb_period=2
 period=24
 dt=0.1 #h
-sim_time=nb_period*48 # hour
+sim_time=nb_period*48 # hours
 
 t=0 # hour
 matrice_C,matrice_L,temps=[],[],[]
@@ -84,10 +84,8 @@ while t < sim_time:
 	C,L=C_plus,L_plus
 	t+=dt
 
-####################
-#	Prepare plotting for C_repartition
-#
-# size-class division
+
+# we want to sum over the size-classes
 matrice_C=np.asarray(matrice_C)
 matrice_L=np.asarray(matrice_L)
 time=len(matrice_C[:,0])
