@@ -51,9 +51,7 @@ t = 0
 dt = 0.5  # [s] time step /sampling rate
 B = Ss / Sr * np.sqrt(2 * 9.81)  # precompute B, constant in the equation for h
 
-# we do not want to have 2 functions, one for plotting, the other for minimization
-minimisation = True #... hence the boolean
-
+# the function to be minimised
 def fc_to_minimize(x):
 	BP, Tn, Td = x[0], x[1], x[2] # get the PID's parameters
 	Kp = 1 / BP
@@ -120,6 +118,9 @@ def fc_to_minimize(x):
 		diff = abs(diff)
 		mean_diff = np.mean(diff)
 		return mean_diff + penalty
+
+# we do not want to have 2 functions, one for plotting, the other for minimization
+minimisation = True #... hence the boolean
 
 # bounds of the parameters
 #       prop.band , integration & derivation times
