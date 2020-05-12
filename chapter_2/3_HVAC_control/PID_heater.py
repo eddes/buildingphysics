@@ -200,4 +200,4 @@ if Td != 0:
 
 plt.legend()
 plt.tight_layout()
-plt.savefig("./PID_heater.pdf",dpi=200,bbox_inches='tight')
+plt.show()
