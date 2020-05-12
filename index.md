@@ -27,21 +27,26 @@ problems.
 
 This manual is composed of three chapters, with a gradual increase in the difficulty:
 
-- **Chapter 1** succinctly explains the fundamentals of the numerical methods used.
+###**Chapter 1** 
+Succinctly explains the fundamentals of the numerical methods used.
 
  ![cover](images/schemes_HAM.png)
  *Explanation of various integration schemes with code examples*
 
-- **Chapter 2** shows applications to heat transfer in phase change materials, PID control and indoor air
+### **Chapter 2** 
+Shows applications to heat transfer in phase change materials, PID control and indoor air
 quality.
 
 ![cover](images/chauffage.png)
+
 *Application example : Indoor air quality simulation*
 
 ![cover](images/pseudo_pareto.png)
-*Application example : indoor air particle filtering and cost estimation*
+ 
+ *Application example : indoor air particle filtering and cost estimation*
 
-- **Chapter 3** is about coupled problems and minimisation. Applications to polydispersed aerosols in
+### **Chapter 3** 
+Is about coupled problems and minimisation. Applications to polydispersed aerosols in
 enclosures, heat and mass transfer in walls and parameter fitting for transient problems are proposed.
 
 ## What about this book
