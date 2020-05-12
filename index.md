@@ -27,7 +27,7 @@ problems.
 
 This manual is composed of three chapters, with a gradual increase in the difficulty:
 
-###**Chapter 1** 
+### **Chapter 1** 
 Succinctly explains the fundamentals of the numerical methods used.
 
  ![cover](images/schemes_HAM.png)
