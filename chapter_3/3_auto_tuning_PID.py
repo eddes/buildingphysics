@@ -52,8 +52,8 @@ dt = 0.5  # [s] time step /sampling rate
 B = Ss / Sr * np.sqrt(2 * 9.81)  # precompute B, constant in the equation for h
 
 # the function to be minimised
-def fc_to_minimize(x):
-	BP, Tn, Td = x[0], x[1], x[2] # get the PID's parameters
+def run_pid_simulation(pid_params):
+	BP, Tn, Td = pid_params[0], pid_params[1], pid_params[2] # get the PID's parameters
 	Kp = 1 / BP
 	# initial values
 	h = f_init * H0  # m height =set point height
@@ -119,7 +119,7 @@ def compute_loss(height, v_pos):
 	return mean_diff + penalty
 
 def fc_to_minimize_wloss(x):
-	_, _, height, v_pos = fc_to_minimize(x)
+	_, _, height, v_pos = run_pid_simulation(x)
 	return compute_loss(height,v_pos)
 
 # bounds of the parameters
@@ -130,11 +130,14 @@ k = 0.5 # starting point between the bounds for each parameter
 x0 = [k * (bnds[0][0] + bnds[0][1]),
 	  k * (bnds[1][0] + bnds[1][1]),
 	  k * (bnds[2][0] + bnds[2][1])]
+
+objective_0, time_0, height_0, v_pos_0 = run_pid_simulation(x0)
+
 sol = minimize(fc_to_minimize_wloss, x0, bounds=bnds, method='TNC', tol=1e-3)
 
 # let us plot the result
 BP, Tn, Td = sol.x[0], sol.x[1], sol.x[2]
-objective, time, height, v_pos = fc_to_minimize([BP, Tn, Td])
+objective, time, height, v_pos = run_pid_simulation([BP, Tn, Td])
 
 print("BP =", round(BP, 3))
 print("Tn =", round(Tn, 1))
@@ -147,6 +150,7 @@ time = time - dt
 plt.xlabel("Time [s]")
 plt.ylabel("Water height [m]")
 plt.plot(time, height, color=coule[-2], linestyle="-", alpha=0.75, marker='o', label='optimisation')
+plt.plot(time, height_0, color=coule[-3], linestyle="-", alpha=0.75, marker='o', label='initial_PID')
 plt.plot(time, np.ones(len(time)) * H0, color='black', linestyle="--", alpha=0.9985, marker='',label='set water height')
 
 plt.legend()
