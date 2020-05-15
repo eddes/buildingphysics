@@ -53,12 +53,13 @@ B = Ss / Sr * np.sqrt(2 * 9.81)  # precompute B, constant in the equation for h
 
 # the function to be minimised
 def run_pid_simulation(pid_params):
+
 	BP, Tn, Td = pid_params[0], pid_params[1], pid_params[2] # get the PID's parameters
 	Kp = 1 / BP
 	# initial values
 	h = f_init * H0  # m height =set point height
 	Qsupply = 0  # no flow rate initially
-	sim_time = 200  # simulation duration s
+	sim_time = 500  # simulation duration s
 	time, height, v_pos = [], [], []
 	t = 0
 	# Remise à zero des paramètres de calcul de la regulation
