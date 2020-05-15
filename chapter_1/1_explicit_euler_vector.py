@@ -36,4 +36,3 @@ plt.xlabel("x position [m]")
 plt.ylabel("Temperature [°C]")
 plt.plot(x_pos, T_plus, 'o-', alpha=0.65)
 plt.show()
-# plt.savefig("./FDM_t"+str(sim_time)+".pdf") # optionally save

@@ -49,15 +49,15 @@ def fc_pressure_drop(m_filt):
 if __name__ == '__main__':
 
 
-	tau=1# vol/h
-	delta=0.15#	1/h
-	eta=0.8 # initial efficiency
-	V=2000 #m3
-	qv=2000 #m3/h
-	dt=1	#h
+	tau=1# vol/h air change rate
+	delta=0.15#	1/h deposition rate in the enclosure
+	eta=0.8 # initial filter efficiency
+	V=2000 #m3 room volume
+	qv=2000 #m3/h supply flow rate
+	dt=1	#h time step
 
-	m_limit=30 # max mass before maintenance (g)
-	nb_filt=0 # number of filters used
+	m_limit=30 # max mass in filter before maintenance (g)
+	nb_filt=0 # counter for the number of filters used
 	# load the PM2.5 data
 	Cext=np.loadtxt("PM25.txt")
 	nb=len(Cext)
@@ -65,18 +65,18 @@ if __name__ == '__main__':
 	# prepare the vectors for computing
 	Csupply=np.zeros(nb)
 	C=np.zeros(nb)
-	m_filter=np.zeros(nb) # initialy nothing in filter
+	m_filter=np.zeros(nb) # initially nothing in filter
 	eta_filter=np.ones(nb)*eta # initial eta for eta_filter[0] actually (will be updated in the time loop)
 	pdc_filter=np.zeros(nb)
 
 	Csupply[0]=Cext[0] # aesthetical fill for plotting
 	m_filter[0]=1e-4 # against division by !0
 	pdc_ref=fc_pressure_drop(0) # reference pressure drop for clean filter
-	# time loop
+	# time loop the size of the measured data (one year)
 	for i in range(1,nb-1):
 		# compute efficiency
 		eta_filter[i]=fc_eta(m_filter[i-1])
-		# compute the additionnal pressure drop compared to clean filter
+		# compute the additional pressure drop compared to clean filter
 		pdc_filter[i]=fc_pressure_drop(m_filter[i-1])-pdc_ref
 		# supply PM2.5 concentration
 		Csupply[i]=(1-eta_filter[i])*Cext[i]
@@ -114,24 +114,24 @@ if __name__ == '__main__':
 	plt.plot(typical_week_ext, color=colors[-1], linestyle="-", alpha=0.9, marker='', label='outdoor')
 	plt.plot(typical_week_filt, color=colors[0], linestyle="-", alpha=0.9, marker='', label='indoor')
 	plt.legend()
-	plt.savefig("./filter_typical_ouik.pdf",dpi=200,bbox_inches='tight')
+	plt.show()
 
 	plt.clf()
 	plt.ylabel("Efficiency [-]")
 	dfC["eta"].plot(color=colors[2], linestyle="--", alpha=1, marker='')
-	plt.savefig("./filter_eta.pdf",dpi=200,bbox_inches='tight')
+	plt.show()
 
 	plt.clf()
 	plt.ylabel("Mass in filter [g]")
 	dfC["mass"].plot(color=colors[3], linestyle="--", alpha=1, marker='')
-	plt.savefig("./filter_mass.pdf",dpi=200,bbox_inches='tight')
+	plt.show()
 
 	plt.clf()
 	plt.ylabel(r"Additional pressure drop of filter [$\Delta$ Pa]")
 	dfC["pdc"].plot(color=colors[4], linestyle="--", alpha=1, marker='')
-	plt.savefig("./filter_pdc.pdf",dpi=200,bbox_inches='tight')
+	plt.show()
 
 	plt.clf()
 	plt.ylabel(r"$PM_{2.5}$[µg/m$^3$]")
 	dfC["PM25"].plot(color=colors[-1], linestyle="--", alpha=0.5, marker='')
-	plt.savefig("./PM25_year.pdf",dpi=200,bbox_inches='tight')
+	plt.show()

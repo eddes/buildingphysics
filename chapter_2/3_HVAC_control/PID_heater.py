@@ -49,7 +49,7 @@ qm = Pmax / (Cp * 20) # flowrate
 
 Tmax = 60 #Tmax eau
 T_in = Tmax #
-T_out = T_in-5 #initialisation of the dT
+T_out = T_in-5 #initialisation of the temperature heater outlet temp.
 T_set=20
 T_init=16
 T_amb = T_init
@@ -106,26 +106,28 @@ while t <= sim_time:
 		delta_error = (T_set - T_amb) - deltaT_previous
 		# valve pos
 		valve_position = Kp * ((T_set - T_amb) + sum_error + Td * delta_error / dt)
+		# store the absolute contribution of all actions for plotting:
 		v_share = Kp * (abs(T_set - T_amb) + abs(sum_error) + Td *abs( delta_error )/ dt)
 		#Control for valve opening
 		if valve_position < 0:
 			valve_position = 0
 			QA=0
-#			T_out=T_amb
 		elif valve_position > 1:
 			valve_position = 1
 			QA=1
 		else:
+			#valve curve
 			Kv_ratio=fc_valve_curve(characteristic, valve_position)
+			#flow rate
 			QA = np.power( (auth * np.power(Kv_ratio, -2) + 1 - auth),-0.5)
 	# heating required
 	else:
 		T_out= fsolve(fc_solve_T_out, T_in-P_heater/(qm*Cp), args=(T_in,T_amb))
 		# DTLM
 		DTLM=(T_in-T_out)/math.log((T_in-T_amb)/(T_out-T_amb))
-		# avoid div by zero and NaN when heating required after non heating period
+		# avoid div by zero and NaN when heating required after non-heating period
 		if np.isnan(DTLM):
-			T_out=max((T_in-0.1),(T_amb-0.1)) # well, you gotta start somewhere
+			T_out=max((T_in-0.1),(T_amb-0.1)) # well, you gotta start somewhere...
 			DTLM=(T_in-T_out)/math.log((T_in-T_amb)/(T_out-T_amb)) # avoid math error
 		P_heater=US_heater * np.power(DTLM,1.3)
 
@@ -148,7 +150,9 @@ while t <= sim_time:
 			valve_position = 1
 			QA=1
 		else:
+			# valve curve
 			Kv_ratio=fc_valve_curve(characteristic, valve_position)
+			# flow rate
 			QA = np.power( (auth * np.power(Kv_ratio, -2) + 1 - auth),-0.5)
 	
 	# compute the inlet temperature
@@ -196,4 +200,4 @@ if Td != 0:
 
 plt.legend()
 plt.tight_layout()
-plt.savefig("./PID_heater.pdf",dpi=200,bbox_inches='tight')
+plt.show()

@@ -96,4 +96,3 @@ plt.plot(x_pos, T, 'o-', alpha=0.65, label='crank-nicolson')
 plt.legend()
 plt.arrow(L_layer1, Tmin, 0, abs(Tmax - Tmin))
 plt.show()
-# plt.savefig("./CN_t" + str(sim_time) + ".png", dpi=200) # optionally, save

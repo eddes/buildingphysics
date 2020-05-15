@@ -9,15 +9,13 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 
 
-# Crank-Nicolson scheme for air polluton equation in the underground
+# Crank-Nicolson scheme for air pollution equation in the underground
 def fc_crank_nicolson(Cp, C, dt, alpha, beta, tau, delta, N, Ce):
     term_C = dt * (alpha * N ** 2 + (beta * N + tau) * (Ce - C) - delta * C)
     term_Cp = dt * (alpha * N ** 2 + (beta * N + tau) * (Ce - Cp) - delta * Cp)
     return -Cp + C + 0.5 * term_C + 0.5 * term_Cp
 
-# a boolean in order to have only one function
-minimisation = False
-
+# the minimisation function
 def min_func(x):
     alpha, beta, delta, tau = x
     dt = 0.25  # 1/h time step
@@ -35,7 +33,7 @@ def min_func(x):
         time.append(t)
         concentration.append(C)
         N = traffic[i]
-        # solve for C+, concentration at the next time step
+        # solve for C+, the concentration at the next time step
         Cp = fsolve(fc_crank_nicolson, C, args=(C, dt, alpha, beta, tau, delta, N, Ce))
         C = Cp
         t += dt
@@ -49,9 +47,12 @@ def min_func(x):
     else:
         return time, concentration, np.mean(dC)
 
-
+# a boolean in order to have only one function both for
+# the evaluation of the function (=minimisation) and the model
+# this time we want to minimise and get the objective function in return of min_func
 minimisation = True
-# bounds for the parameters
+
+# setting the bounds for the parameters
 #           alpha      beta     delta      tau
 bnds = ((0.2, 0.5), (0.05, 0.2), (0.01, 10), (0.1, 1))
 k = 0.5 # starting point in the middle of all bounds
@@ -64,6 +65,7 @@ sol = minimize(min_func, x0, bounds=bnds, method='TNC', tol=1e-3)
 
 # now let us plot the results
 alpha, beta, delta, tau = sol.x[0], sol.x[1], sol.x[2], sol.x[3]
+# this time we want to plot and get the concentration in return of min_func
 minimisation = False
 time, concentration, mean_error = min_func([alpha, beta, delta, tau])
 print("alpha\t, beta\t, delta\t, tau")
