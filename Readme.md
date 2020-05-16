@@ -18,7 +18,8 @@ To run a notebook, click on one of the links below, then on the button ![GoogleC
   - [PID water tank](notebooks/chapter_2/PID_controller.ipynb)  
 
   ### Chapter 3 : coupled problems and minimization
-  - Work in progress
+  - [Auto tuning PID](/notebooks/chapter_3/auto_tuning_PID.ipynb) 
+  - Particle modeling in train station
 
 ## 2/ Python scripts
 
