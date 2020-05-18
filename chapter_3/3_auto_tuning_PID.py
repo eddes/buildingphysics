@@ -52,13 +52,14 @@ dt = 0.5  # [s] time step /sampling rate
 B = Ss / Sr * np.sqrt(2 * 9.81)  # precompute B, constant in the equation for h
 
 # the function to be minimised
-def fc_to_minimize(x):
-	BP, Tn, Td = x[0], x[1], x[2] # get the PID's parameters
+def run_pid_simulation(pid_params):
+
+	BP, Tn, Td = pid_params[0], pid_params[1], pid_params[2] # get the PID's parameters
 	Kp = 1 / BP
 	# initial values
 	h = f_init * H0  # m height =set point height
 	Qsupply = 0  # no flow rate initially
-	sim_time = 200  # simulation duration s
+	sim_time = 500  # simulation duration s
 	time, height, v_pos = [], [], []
 	t = 0
 	# Remise à zero des paramètres de calcul de la regulation
@@ -69,7 +70,7 @@ def fc_to_minimize(x):
 	while t <= sim_time:
 		# Crank-Nicolson semi-implicit for water height
 		A = Qsupply / Sr  # compute A
-		h = fsolve(fc_CN, h, args=(h, dt, A, B))
+		h = fsolve(fc_CN, h, args=(h, dt, A, B))[0]
 		# integral action
 		sum_error = dt / Tn * (H0 - h) + sum_error
 		# derivative action
@@ -95,47 +96,50 @@ def fc_to_minimize(x):
 	diff = np.asarray(height) - height_set
 	diff = abs(diff)
 	mean_diff = np.mean(diff)
-	#if we want to plot, we need the values
-	if minimisation == False:
-		return mean_diff, time, height, v_pos
-	else: # else we are minimising
-		# penalize the result if
-		penalty = 0
-		idx0 = np.where(v_pos == 0)
-		if len(idx0[0]) > 10:
-			penalty += 100
 
-		# compute gradient
-		i = int(len(v_pos) / 2)
-		v = v_pos[i:-2]
-		vp = v_pos[i + 1:-1]
-		md = np.mean(abs(vp - v))
-		if md > 0.02:
-			penalty += 100
+	return mean_diff, time, height, v_pos
 
-		height_set = H0 * np.ones(len(height))
-		diff = np.asarray(height) - height_set
-		diff = abs(diff)
-		mean_diff = np.mean(diff)
-		return mean_diff + penalty
+def compute_loss(height, v_pos):
+	# penalize the result if
+	penalty = 0
+	idx0 = np.where(v_pos == 0)
+	if len(idx0[0]) > 10:
+		penalty += 100
 
-# we do not want to have 2 functions, one for plotting, the other for minimization
-minimisation = True #... hence the boolean
+	# compute gradient
+	i = int(len(v_pos) / 2)
+	v = v_pos[i:-2]
+	vp = v_pos[i + 1:-1]
+	md = np.mean(abs(vp - v))
+	if md > 0.02:
+		penalty += 100
+	height_set = H0 * np.ones(len(height))
+	diff = np.asarray(height) - height_set
+	diff = abs(diff)
+	mean_diff = np.mean(diff)
+	return mean_diff + penalty
+
+def fc_to_minimize_wloss(x):
+	_, _, height, v_pos = run_pid_simulation(x)
+	return compute_loss(height,v_pos)
 
 # bounds of the parameters
 #       prop.band , integration & derivation times
 bnds = ((0.1, 0.6), (5, 500) , (0.5, 100))
 
 k = 0.5 # starting point between the bounds for each parameter
-x0 = [k * bnds[0][0] + bnds[0][1],
-	  k * bnds[1][0] + bnds[1][1],
-	  k * bnds[2][0] + bnds[2][1]]
-sol = minimize(fc_to_minimize, x0, bounds=bnds, method='TNC', tol=1e-3)
+x0 = [k * (bnds[0][0] + bnds[0][1]),
+	  k * (bnds[1][0] + bnds[1][1]),
+	  k * (bnds[2][0] + bnds[2][1])]
+
+objective_0, time_0, height_0, v_pos_0 = run_pid_simulation(x0)
+
+sol = minimize(fc_to_minimize_wloss, x0, bounds=bnds, method='TNC', tol=1e-3)
 
 # let us plot the result
-minimisation = False
 BP, Tn, Td = sol.x[0], sol.x[1], sol.x[2]
-objective, time, height, v_pos = fc_to_minimize([BP, Tn, Td])
+objective, time, height, v_pos = run_pid_simulation([BP, Tn, Td])
+
 print("BP =", round(BP, 3))
 print("Tn =", round(Tn, 1))
 print("Td =", round(Td, 1))
@@ -147,6 +151,7 @@ time = time - dt
 plt.xlabel("Time [s]")
 plt.ylabel("Water height [m]")
 plt.plot(time, height, color=coule[-2], linestyle="-", alpha=0.75, marker='o', label='optimisation')
+plt.plot(time, height_0, color=coule[-3], linestyle="-", alpha=0.75, marker='o', label='initial_PID')
 plt.plot(time, np.ones(len(time)) * H0, color='black', linestyle="--", alpha=0.9985, marker='',label='set water height')
 
 plt.legend()
