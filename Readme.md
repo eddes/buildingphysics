@@ -1,7 +1,8 @@
 (Work in progress ! The book has not been released yet :)
 # Building Physics - Applications in Python
 
-This repository provides Python implementations of the models presented in the book **Building Physics - Applications in Python**. 
+[The book will be available for download on this page.](https://eddes.github.io/buildingphysics/)This repository provides Python implementations of the models presented in the book **Building Physics - Applications in Python**. 
+
 There are two ways of using this repository :
 
 ## 1/ No install: Colab Notebooks
