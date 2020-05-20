@@ -20,7 +20,7 @@ To run a notebook, click on one of the links below, then on the button ![GoogleC
 
   ### Chapter 3 : coupled problems and minimization
   - [Auto tuning PID](/notebooks/chapter_3/auto_tuning_PID.ipynb) 
-  - Particle modeling in train station
+  - [Particle modeling](/notebooks/chapter_3/underground_IAQ_min_func.ipynb)  in train station
 
 ## 2/ Python scripts
 
