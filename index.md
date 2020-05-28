@@ -86,6 +86,6 @@ title = {Building Physics Applications in Python},
 author = {Walther, E.},
 year = {2020},
 publisher = {Spring},
-address = {Argentoratum}
+address = {Paris}
 }
 ```
