@@ -13,7 +13,7 @@ To run a notebook, click on one of the links below, then on the button ![GoogleC
   ### Chapter 1: Basics of numerical methods
    - [Euler and Crank Nicolson integration schemes](notebooks/chapter_1/Euler_and_CN_schemes.ipynb) 
 
-  ### Chapter 2 - Transient problems: PCM, HVAC
+  ### Chapter 2 - Transient problems: PCM, filtration, PID controller
   - [Phase change material](notebooks/chapter_2/PCM.ipynb)  
   - [Particle filtration](notebooks/chapter_2/code_IAQ_filtration.ipynb)  
   - [PID water tank](notebooks/chapter_2/PID_controller.ipynb)  
