@@ -45,7 +45,7 @@ T_temp=np.zeros((n,m)) #
 dt_max=1./( (2*r*v_w)/dx  + (4*alpha)/dx**2 )
 dt=int(0.95*dt_max) # stay on the safe side
 print("stable dt = ", dt, ' s')
-# take it easy with stability > do not exceed 1h
+# take it easy with stability/precision compromise > do not exceed 1h
 if dt>3600:
 	dt=3600
 	print("chosen dt = ", dt, ' s')
@@ -53,7 +53,7 @@ if dt>3600:
 Co=v_w*dt/dx
 Fo=alpha*dt/dx**2
 
-# interpolate at the chosen time step
+# interpolate outdoor conditions at the chosen time step
 Tout=np.load('./Ta_out.npy')
 t_epw=np.arange(0,len(Tout))*3600
 t_new= np.arange(0,t_epw[-1], dt)
@@ -90,7 +90,7 @@ ii=0 # increment for the outdoor temperature
 for t in tqdm(np.arange(0,sim_time,dt)):
 	# compute the heating departure temperature
 	T_hot=-1.05*Tout[ii]+33.7
-	# heat power required
+	# heating power required
 	P_h   = (19-Tout[ii])/dTmax*Pmax 
 	# compute the heating mode COP
 	COP_h = eta_carnot*(T_hot+273.15+5)/(T_hot+5-T_avg-5)
