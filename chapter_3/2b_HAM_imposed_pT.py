@@ -10,7 +10,6 @@ coule=[rouge_A,vert1_A,vert2_A,vert3_A,vert4_A,gris1_A]
 import numpy as np
 import matplotlib.pyplot as plt
 from  scipy.optimize import fsolve
-import scipy.interpolate
 from tqdm import tqdm
 
 import time
@@ -25,27 +24,28 @@ def fc_pvsat(T):
 # vapour diffusivity depending on water content 
 def fc_deltav(w):
 	a=1.1*1e-7
-	b=-1.57*1e-10
+	b=-1.57*1e-7
 	return a+b*w
 # thermal conductivity depending on water content 
 def fc_lambda(w):
 	a=0.23
-	b=0.006
+	b=6
 	return a+b*w
 # sorption curve
 def fc_w_phi(phi):
 	a=700 #1000
 	b=250*1e-6 # 146*1e-6
 	c=2.9#1.59
-	# let's try to avoid numerical problems 
-	# with invalid log values...
-	try: 
-		res=a/np.power( 1- np.log(phi/100)/b, 1/c)
-	# ... hence the upper limit for w
-	except: 
-		print(phi)
-		res=600
-	return res
+	res=a/np.power( 1- np.log(phi/100)/b, 1/c)
+	return res*1e-3
+# sortpion curve the other way around
+def fc_phi_w(w):
+	a=700 #1000
+	b=250*1e-6 # 146*1e-6
+	c=2.9#1.59
+	phi =np.zeros(len(w))
+	phi=np.exp(b*(1-np.power((a/(1000*w)),c)))*100
+	return phi
 
 # update local Fourier 
 def update_Fo(w_vec,k,rho,Cp,dt,dx):
@@ -61,21 +61,21 @@ def update_Fow(w_vec,dt,dx):
 	return Fow
 
 # update local Fourier 
-def update_Cpm(w,phi,T):
-	epsilon=0.005*min(w)
+def update_Cm(w,phi,T):
+	epsilon=0.001*np.min(w)
 	wp=w+epsilon
-	phip=fc_w_phi(wp)
-	dw=wp-w
-	dphi=phip-phi
+	phip=fc_phi_w(wp)
+	dw=abs(wp-w)
+	dphi=abs(phip-phi)/100
 	pvs=fc_pvsat(T)
-	Cpm=abs(dw/dphi)/pvs
-	return Cpm,dw,dphi
+	Cm=dw/dphi/pvs
+	return Cm
 
 ############################################################
 #
 #	Equation solving
 # 
-def fc_coupled_HAM(vec_Tpvp,vec_Tpv,K,Fo,Fow,dt,rho,Cp,Cpm,Lv):
+def fc_coupled_HAM(vec_Tpvp,vec_Tpv,K,Fo,Fow,dt,rho,Cp,Cm,Lv):
 	# split array 
 	n=int(len(vec_Tpv)/2) # half index
 	T,pv   = vec_Tpv[0:n] ,vec_Tpv[n:]
@@ -85,18 +85,17 @@ def fc_coupled_HAM(vec_Tpvp,vec_Tpv,K,Fo,Fow,dt,rho,Cp,Cpm,Lv):
 	# compute w 
 	w=fc_w_phi(phi)
 	# update the properties 
-	Cpm,dw,dphi=update_Cpm(w,phi,T)
-	Fo=update_Fo(w,k,rho,Cp,dt,dx)
-	Fow=update_Fow(w,dt,dx)
-	
+	Cm = update_Cm(w,phi,T)
+	Fo  = update_Fo(w,k,rho,Cp,dt,dx)
+	Fow = update_Fow(w,dt,dx)
 	# Crank-Nicolson scheme
 	# explicit and implicit parts for T
-	exp_T=0.5 * (Fo * np.dot(K,T) + Lv * Fow/(rho * Cp) * np.dot(K,pv))
-	imp_T=0.5 * (Fo * np.dot(K,Tp) + Lv *Fow/(rho * Cp) * np.dot(K,pvp))
+	exp_T=0.5 * (Fo * np.dot(K,T) +  Lv * Fow/(rho * Cp) * np.dot(K,pv))
+	imp_T=0.5 * (Fo * np.dot(K,Tp) + Lv * Fow/(rho * Cp) * np.dot(K,pvp))
 	T_term = -Tp + T + exp_T + imp_T
 	# explicit and implicit parts for pv
-	exp_pv=0.5 * (Fow/Cpm * np.dot(K,pv))
-	imp_pv=0.5 * (Fow/Cpm * np.dot(K,pvp))
+	exp_pv=0.5 * (Fow/Cm * np.dot(K,pv))
+	imp_pv=0.5 * (Fow/Cm * np.dot(K,pvp))
 	pv_term = -pvp + pv + exp_pv + imp_pv
 	# send back as one array
 	return np.hstack([T_term,pv_term])
@@ -110,18 +109,19 @@ K=np.eye(n,n,k=-1)*1 + np.eye(n,n)*-2 + np.eye(n,n,k=1)*1
 K[0,0],K[0,1],K[-1,-1],K[-1,-2]=0,0,0,0
 
 #####################
-# 
-# TIME  TIME TIME TIME TIME
-#
+# Time & storage
 t=0
 dt=60
-period=24 # pour la sinusoide
+period=24 #
 period_sec=period*3600
-nb_period=0.5 # 365
+nb_period=0.1#
 sim_time=nb_period*24*3600 # seconds
 modulo_storage=int(0.1*3600) #sim_time/dt/100
-
-##################
+# preparing post-process
+store_Text,store_pvext=[],[]
+store_w,store_phi,store_T,store_pv=[],[],[],[]
+# arrays
+pv,dw,w,T=np.ones(n),np.ones(n),np.ones(n),np.ones(n)
 
 # physical props
 Lv=2400*1e3 # J/kg
@@ -131,70 +131,38 @@ Cp=1000
 alpha=k/rho/Cp #1e-7 #m2/s
 dx=L/(n_solid) #
 Fo=alpha*dt/dx**2
-
 # boundary conditions
-Tleft=10
-pvleft=0.8*fc_pvsat(Tleft)
-phileft=pvleft/(fc_pvsat(Tleft))*100
-
+Tleft=20
+pvleft=1200
 Tright=Tleft
 pvright=pvleft
-phiright=pvright/(fc_pvsat(Tright))*100
-
-## vectors
-pv=np.ones(n)
-dw=np.zeros(n)
-w=np.ones(n)
-T=np.ones(n)
-
 # initial conditions
-pv=np.ones(n)*pvleft*0.95
-T=np.ones(n)*Tleft*0.95
-
+pv_init=np.ones(n)*1300
+T_init=np.ones(n)*15
+pv=pv_init
+T=T_init
 phi=pv/fc_pvsat(T)*100
 w=fc_w_phi(phi)
-Cpm,dw,dphi=update_Cpm(w,phi,T)
-Fo=update_Fo(w,k,rho,Cp,dt,dx)
-Fow=update_Fow(w,dt,dx)
-#-------------------------------------------------
-# 	Preparing the boundary conditions
-#
-# load pressure and temperature
-pvleft_epw=np.load("pv_out.npy")
-Tleft_epw=np.load("Ta_out.npy")
+w_init=w
+phi_init=phi
 
-pvleft_epw=pvleft_epw[0:int(24*(nb_period+1))]
-Tleft_epw=Tleft_epw[0:int(24*(nb_period+1))]
-
-#number of seconds
-t_epw=np.arange(0,len(pvleft_epw))*3600
-# resample pv
-x,y = t_epw,pvleft_epw
-y_interp = scipy.interpolate.interp1d(x, y)
-t_new= np.arange(0,t_epw[-1], dt)
-pvleft=y_interp(t_new)
-#resample temperature
-x,y = t_epw,Tleft_epw
-y_interp = scipy.interpolate.interp1d(x, y)
-Tleft=y_interp(t_new)
-
-store_Text,store_pvext=[],[]
-store_w,store_phi,store_T,store_pv=[],[],[],[]
-
+Cm = update_Cm(w,phi,T)
+Fo  = update_Fo(w,k,rho,Cp,dt,dx)
+Fow = update_Fow(w,dt,dx)
 i=0
+pbar=tqdm(total=sim_time) #set up a progress par
 # time loop
-pbar = tqdm(total=sim_time)
 while t <= sim_time:
 	# update boundary conditions
-	T[0]  = Tleft[i]
-	T[n-1]= Tright # + 1.5*np.sin(t*2*np.pi/period_sec)
-	pv[0] = pvleft[i]
-	pv[n-1]=pvright #+ 100*np.cos(t*2*np.pi/period_sec)
+	T[0]  = Tleft
+	T[-1] = Tleft +20
+	pv[0] = pvleft
+	pv[-1]= pvleft +300
 
 	# solve the coupled, non-linear system
 	result_array=fsolve(fc_coupled_HAM,
 			 np.hstack([T,pv]),
-			 args=(np.hstack([T,pv]), K, Fo, Fow, dt, rho, Cp, Cpm, Lv))
+			 args=(np.hstack([T,pv]), K, Fo, Fow, dt, rho, Cp, Cm, Lv))
 	
 	# split the result into T and pv
 	T_plus,pv_plus=result_array[0:n], result_array[n:]
@@ -203,18 +171,46 @@ while t <= sim_time:
 	phi=pv/fc_pvsat(T)*100
 	# compute water content
 	w=fc_w_phi(phi)
-	# update the properties
-	Cpm,dw,dphi=update_Cpm(w,phi,T)
-	Fo=update_Fo(w,k,rho,Cp,dt,dx)
-	Fow=update_Fow(w,dt,dx)
+
+	# do some storage for plotting
+	if (int(t) % modulo_storage)==0 and t!=0:
+		store_w.append(w[1:-1]*1000)
+		store_phi.append(phi[1:-1])
+		store_T.append(T[1:-1])
+		store_pv.append(pv[1:-1])
 	# update variables
 	pv = pv_plus
 	T=T_plus
 	t+=dt
 	i+=1
-	pbar.update(dt)
-pbar.close()
+	pbar.update(dt) # update progress bar
+pbar.close() # close it
 
 elapsed_time= (time.time() - start_time) # in seconds
 print('computational effort ',round(elapsed_time/(sim_time/3600),2), ' [seconds/hour simulation]')
 print('elapsed time :', round(elapsed_time/3600), 'h', round((elapsed_time % 3600)/60), 'min')
+x_pos=np.arange(int(L/dx)+2)*dx
+x_pos=x_pos-dx/2
+x_pos=x_pos[1:-1]
+
+print("\n#################\nPlotting (can be long)")
+stop=int(len(store_phi))
+start=0
+############################################################
+##############################
+plt.subplot(121)
+plt.xlabel("x position [m]")
+plt.ylabel(r"$\varphi$ [%]")
+plt.plot(x_pos,phi_init[1:-1], '--',color=coule[1], alpha=0.5)
+for i in range(start,stop):
+	plt.plot(x_pos, store_phi[i], '-',color=coule[1], alpha=0.35)
+
+plt.subplot(122)
+plt.xlabel("x position [m]")
+plt.ylabel("water content [g/m$^3$]")
+plt.plot(x_pos,w_init[1:-1]*1000, '--',color=coule[3], alpha=0.5)
+for i in range(start,stop):
+	plt.plot(x_pos, store_w[i], '-',color=coule[3], alpha=0.15)
+
+plt.tight_layout()
+plt.savefig("./graph_duo_phi_w.pdf")
