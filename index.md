@@ -6,7 +6,7 @@ an overview of building physics applications in python language for students, te
 
 ## Get the book
 
-- [Download a .pdf copy of the book](link_to_the_book)
+- [Download a .pdf copy of the book](https://www.researchgate.net/publication/353514722_Building_Physics_-_Applications_in_Python)
 - [Access the Github repository](https://github.com/eddes/buildingphysics)
 
 
