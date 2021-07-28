@@ -81,11 +81,11 @@ This work is licensed under a Creative Commons “AttributionNonCommercial-Share
 This book is free, open and available online.
 If you found it of any use, you are most welcome to cite it with this reference:
 ```
-@book{walther2020,
+@book{walther2021,
 title = {Building Physics Applications in Python},
 author = {Walther, E.},
-year = {2020},
-publisher = {Spring},
+year = {2021},
+publisher = {DIY Spring},
 address = {Paris}
 }
 ```
