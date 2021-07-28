@@ -1,7 +1,6 @@
-(Work in progress ! The book has not been released yet :)
 # Building Physics - Applications in Python
 
-[The book will be available for download on this page.](https://eddes.github.io/buildingphysics/)This repository provides Python implementations of the models presented in the book **Building Physics - Applications in Python**. 
+[The book is available for download on this page.](https://www.researchgate.net/publication/353514722_Building_Physics_-_Applications_in_Python)This repository provides Python implementations of the models presented in the book **Building Physics - Applications in Python**. 
 
 There are two ways of using this repository :
 
