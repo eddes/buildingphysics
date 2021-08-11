@@ -38,29 +38,23 @@ Shows applications to heat transfer in phase change materials, PID control and i
 quality.
 
 ![cover](images/chauffage.png)
-
 *Application example : Room model coupled with a heating system*
 
 ![cover](images/pseudo_pareto.png)
- 
- *Application example : Indoor air particle filtration cost and service estimation*
+*Application example : Indoor air particle filtration cost and service estimation*
 
 ### **Chapter 3** 
 Is about coupled problems and minimisation. Applications to polydispersed aerosols in
 enclosures, heat and mass transfer in walls and parameter fitting for transient problems are proposed.
 
 ![cover](images/HAM.png)
-
 *Application example : Heat and Mass Transfer within a wall*
 
 
 ![cover](images/PID.png)
-
 *Application example : Automatic tuning of a PID controller*
 
-
 ![cover](images/UAQ.png)
-
 *Application example : Parameter fitting on a partial differential equation representing train traffic*
 
 ## What about this book
