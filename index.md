@@ -1,10 +1,10 @@
-Written during Spring 2020 as an attempt to make something out the global lock-down, these pages present
+Written during Spring and Autumn 2020 as an attempt to make something out the global lock-downs, these pages present
 an overview of building physics applications in python language for students, teachers or engineers.
 
 
 ![cover](images/cover_v0.png)
 
-## Get the book
+## Get the book  (it is free)
 
 - [Download a .pdf copy of the book](https://www.researchgate.net/publication/353514722_Building_Physics_-_Applications_in_Python)
 - [Access the Github repository](https://github.com/eddes/buildingphysics)
@@ -65,7 +65,6 @@ enclosures, heat and mass transfer in walls and parameter fitting for transient 
 
 ## What about this book
 
-
 For all cases examined in the following chapters, source code or supplementary material such as pollution/weather data are available. Two types of users may be interested:
 
 - If you want to play with the parameters of the models described, a simple a web browser is sufficient,
@@ -90,10 +89,10 @@ This book is free, open and available online.
 If you found it of any use, you are most welcome to cite it with this reference:
 ```
 @book{walther2021,
-title = {Building Physics Applications in Python},
-author = {Walther, E.},
-year = {2021},
-publisher = {DIY Spring},
-address = {Paris}
+ title = {Building Physics Applications in Python},
+ author = {Walther, E.},
+ year = {2021},
+ publisher = {DIY Spring},
+ address = {Paris}
 }
 ```
