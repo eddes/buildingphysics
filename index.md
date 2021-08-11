@@ -49,13 +49,21 @@ quality.
 Is about coupled problems and minimisation. Applications to polydispersed aerosols in
 enclosures, heat and mass transfer in walls and parameter fitting for transient problems are proposed.
 
+![cover](images/HAM.png)
+
+*Application example : Heat and Mass Transfer within a wall*
+
+
+![cover](images/PID.png)
+
+*Application example : Automatic tuning of a PID controller*
+
+
+![cover](images/UAQ.png)
+
+*Application example : Parameter fitting on a partial differential equation representing train traffic*
+
 ## What about this book
-
-
-
-
-
-
 
 
 For all cases examined in the following chapters, source code or supplementary material such as pollution/weather data are available. Two types of users may be interested:
