@@ -89,3 +89,12 @@ publisher = {DIY Spring},
 address = {Paris}
 }
 ```
+
+## Flux de grande longueur d’onde
+
+**Méthode des radiosités**  
+La radiosité est définie comme le flux total partant d’une surface,
+c’est une émission apparente définie comme :
+$$\\begin{aligned}
+     J_i &=& \\varepsilon_i M\_{0i} + \\rho_i E_i \\\\
+\\text{Ou encore } J_i &=& \\varepsilon_i M\_{0i} + (1-\\varepsilon_i) E_i \\label{eq:def_J}\\end{aligned}$$
