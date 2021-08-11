@@ -39,11 +39,11 @@ quality.
 
 ![cover](images/chauffage.png)
 
-*Application example : Indoor air quality simulation*
+*Application example : Room model coupled with a heating system*
 
 ![cover](images/pseudo_pareto.png)
  
- *Application example : indoor air particle filtering and cost estimation*
+ *Application example : Indoor air particle filtration cost and service estimation*
 
 ### **Chapter 3** 
 Is about coupled problems and minimisation. Applications to polydispersed aerosols in
